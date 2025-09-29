@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard - PM-internAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+        <a href="/admin/logout">Logout</a>
+    </header>
+
+    <h2>Internships</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th><th>Title</th><th>Company</th><th>Domain</th>
+            <th>Location</th><th>Duration</th><th>Stipend</th><th>Actions</th>
+        </tr>
+        {% for i in internships %}
+        <tr>
+            <td>{{ i.id }}</td>
+            <td>{{ i.title }}</td>
+            <td>{{ i.company }}</td>
+            <td>{{ i.domain }}</td>
+            <td>{{ i.location }}</td>
+            <td>{{ i.duration }}</td>
+            <td>{{ i.stipend }}</td>
+            <td>
+                <a href="/admin/edit/{{ i.id }}">Edit</a> | 
+                <a href="/admin/delete/{{ i.id }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Add Internship</h2>
+    <form method="POST" action="/admin/add">
+        <input type="text" name="title" placeholder="Title"><br>
+        <input type="text" name="company" placeholder="Company"><br>
+        <input type="text" name="domain" placeholder="Domain"><br>
+        <input type="text" name="location" placeholder="Location"><br>
+        <input type="text" name="duration" placeholder="Duration (months)"><br>
+        <input type="text" name="stipend" placeholder="Stipend"><br>
+        <input type="text" name="skills" placeholder="Skills"><br>
+        <textarea name="description" placeholder="Description"></textarea><br>
+        <input type="text" name="apply_link" placeholder="Apply Link"><br>
+        <button type="submit">Add</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact - PM-internAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="logo">PM-internAI</div>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact" class="active">Contact</a></li>
+            <li><a href="/login">Admin</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <h1>Contact Us</h1>
+        <p>We’d love to hear from you!</p>
+    </section>
+
+    <section>
+        <form>
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+
+    <section>
+        <h3>Email:</h3>
+        <p>support@pm-internai.in</p>
+
+        <h3>Phone:</h3>
+        <p>+91 98765 43210</p>
+    </section>
+</body>
+</html>

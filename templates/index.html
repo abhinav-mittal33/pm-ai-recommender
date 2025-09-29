@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{ t_get(lang,'title') }}</title>
+  <style>
+    :root{--accent:#2e7d32;--muted:#666}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial; margin:0; background:#f7f7f8; color:#111}
+    header{background:#fff;padding:14px 18px;border-bottom:1px solid #e6e6e6;display:flex;gap:12px;align-items:center;justify-content:space-between}
+    .brand{font-weight:700}
+    .container{max-width:1100px;margin:18px auto;padding:0 12px;display:grid;grid-template-columns:1fr 360px;gap:18px}
+    main{ }
+    aside{background:#fff;padding:16px;border-radius:10px;box-shadow:0 6px 18px rgba(20,20,20,0.04)}
+    .card{background:#fff;padding:18px;border-radius:10px;margin-bottom:12px;box-shadow:0 6px 18px rgba(20,20,20,0.04)}
+    form input[type=file], form input[type=text], form input[type=email], form select {width:100%;padding:10px;border:1px solid #ddd;border-radius:8px}
+    .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:8px;border:none;cursor:pointer}
+    .job-card{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:8px;background:#fff;margin-bottom:10px;border:1px solid #eaeaea}
+    .score{font-weight:800;color:var(--accent);min-width:72px;text-align:center}
+    .job-body{flex:1}
+    .small{font-size:13px;color:var(--muted);margin-top:6px}
+    .lead{font-size:13px;color:#333;margin:6px 0}
+    footer{max-width:1100px;margin:12px auto;padding:8px;color:#666;font-size:13px}
+    @media (max-width:880px){
+      .container{grid-template-columns:1fr; padding: 12px}
+      aside{order:2}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">{{ t_get(lang,'title') }}</div>
+  <div>
+    <form method="get" style="display:inline">
+      <select name="lang" onchange="this.form.submit()">
+        <option value="en" {% if lang=='en' %}selected{% endif %}>English</option>
+        <option value="hi" {% if lang=='hi' %}selected{% endif %}>हिन्दी</option>
+        <option value="ta" {% if lang=='ta' %}selected{% endif %}>தமிழ்</option>
+        <option value="gu" {% if lang=='gu' %}selected{% endif %}>ગુજરાતી</option>
+        <option value="bn" {% if lang=='bn' %}selected{% endif %}>বাংলা</option>
+        <option value="mr" {% if lang=='mr' %}selected{% endif %}>मराठी</option>
+        <option value="te" {% if lang=='te' %}selected{% endif %}>తెలుగు</option>
+        <option value="kn" {% if lang=='kn' %}selected{% endif %}>ಕನ್ನಡ</option>
+        <option value="ml" {% if lang=='ml' %}selected{% endif %}>മലയാളം</option>
+        <option value="ur" {% if lang=='ur' %}selected{% endif %}>اردو</option>
+      </select>
+    </form>
+  </div>
+</header>
+
+<div class="container">
+  <main>
+    <div class="card">
+      <h3>{{ t_get(lang,'upload_cta') }}</h3>
+      <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="resume" accept=".pdf,.docx,.txt">
+        <div style="height:8px"></div>
+        <button class="btn" type="submit">{{ t_get(lang,'find_btn') }}</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>{{ t_get(lang,'or_fill') }}</h3>
+      <form method="POST">
+        <input name="name" placeholder="Your name" />
+        <div style="height:8px"></div>
+        <input type="email" name="email" placeholder="Email (optional)" />
+        <div style="height:8px"></div>
+        <input name="skills" placeholder="Skills (comma separated) - e.g. Python, SQL" />
+        <div style="height:8px"></div>
+        <input name="domain" placeholder="Domain interest - e.g. Data Science" />
+        <div style="height:8px"></div>
+        <input name="location" placeholder="Preferred location - e.g. Mumbai" />
+        <div style="height:8px"></div>
+        <button class="btn" type="submit">{{ t_get(lang,'find_btn') }}</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>{{ t_get(lang,'assistant') }}</h3>
+      <form method="POST">
+        <input name="assistant_question" placeholder="Ask: e.g., Best AI internships in Bangalore?" />
+        <div style="height:8px"></div>
+        <button class="btn" type="submit">{{ t_get(lang,'assistant') }}</button>
+      </form>
+      {% if assistant_answer %}
+        <div class="lead" style="margin-top:12px">Assistant suggestions:</div>
+        {% for a in assistant_answer %}
+          <div class="job-card">
+            <div class="score">{{ a.match_percent }}%</div>
+            <div class="job-body">
+              <div><strong>{{ a.title_t or a.title }}</strong> — {{ a.company_t or a.company }}</div>
+              <div class="small">{{ a.domain_t or a.domain }} • {{ a.location_t or a.location }} • Duration: {{ a.duration }} • Stipend: {{ a.stipend }}</div>
+              <div class="small">{{ a.description_t or a.description }}</div>
+              <div class="small"><strong>Why:</strong> {{ a.explain_t or a.explain }}</div>
+              <form method="post" action="/apply_redirect" style="margin-top:8px">
+                <input type="hidden" name="apply_link" value="{{ a.apply_link }}">
+                <input type="hidden" name="name" value="">
+                <input type="hidden" name="email" value="">
+                <button class="btn" type="submit">{{ t_get(lang,'apply') }}</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h3>Recommended Internships</h3>
+      {% if recommendations %}
+        {% for r in recommendations %}
+          <div class="job-card">
+            <div class="score">{{ r.match_percent }}%</div>
+            <div class="job-body">
+              <div><strong>{{ r.title_t or r.title }}</strong> — {{ r.company_t or r.company }}</div>
+              <div class="small">{{ r.domain_t or r.domain }} • {{ r.location_t or r.location }} • Duration: {{ r.duration }} • Stipend: {{ r.stipend }}</div>
+              <div class="lead">{{ r.description_t or r.description }}</div>
+              <div class="small"><strong>Matched skills:</strong>
+                {% set ms = r.matched_skills_t if r.matched_skills_t is defined else r.matched_skills %}
+                {% if ms %}
+                  {% set show = ms[:6] %}
+                  {{ show|join(', ') }}
+                  {% if ms|length > 6 %} +{{ ms|length - 6 }} more{% endif %}
+                {% else %}
+                  None detected
+                {% endif %}
+              </div>
+              <div class="small"><strong>Why recommended:</strong> {{ r.explain_t or r.explain }}</div>
+              <form method="post" action="/apply_redirect" style="margin-top:8px">
+                <input type="hidden" name="apply_link" value="{{ r.apply_link }}">
+                <input type="hidden" name="name" value="">
+                <input type="hidden" name="email" value="">
+                <button class="btn" type="submit">{{ t_get(lang,'apply') }}</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="small">No recommendations yet. Upload a CV or use the manual form.</div>
+      {% endif %}
+    </div>
+
+  </main>
+
+  <aside>
+    <div class="lead">{{ t_get(lang,'skills_in_demand') }}</div>
+    <ul>
+      {% for item in leaderboard %}
+        <li>{{ item.skill }} — {{ item.count }}</li>
+      {% endfor %}
+    </ul>
+
+    <div style="height:12px"></div>
+    <div class="lead">{{ t_get(lang,'career_suggestions') }}</div>
+    <ul>
+      {% for g in guidance %}
+        <li>{{ g }}</li>
+      {% endfor %}
+    </ul>
+
+    {% if debug_text %}
+      <div style="height:12px"></div>
+      <div class="small"><strong>Debug:</strong> {{ debug_text }}</div>
+    {% endif %}
+  </aside>
+</div>
+
+<footer>
+  Built for hackathon / demo. Local demo mode.
+</footer>
+
+</body>
+</html>
+
+

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Internship - PM-internAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Edit Internship</h2>
+    <form method="POST">
+        <input type="text" name="title" value="{{ internship.title }}"><br>
+        <input type="text" name="company" value="{{ internship.company }}"><br>
+        <input type="text" name="domain" value="{{ internship.domain }}"><br>
+        <input type="text" name="location" value="{{ internship.location }}"><br>
+        <input type="text" name="duration" value="{{ internship.duration }}"><br>
+        <input type="text" name="stipend" value="{{ internship.stipend }}"><br>
+        <input type="text" name="skills" value="{{ internship.skills }}"><br>
+        <textarea name="description">{{ internship.description }}</textarea><br>
+        <input type="text" name="apply_link" value="{{ internship.apply_link }}"><br>
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>

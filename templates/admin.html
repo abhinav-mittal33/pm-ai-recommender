@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin - Upload CSV</title>
+  <style>
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;margin:24px}
+    .card{background:#fff;padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(20,20,20,0.04)}
+    input[type=file]{display:block;margin:8px 0}
+    .btn{background:#1976d2;color:#fff;padding:10px;border-radius:8px;border:none}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Admin — Upload internships CSV</h2>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="csvfile" accept=".csv" required>
+      <div style="height:8px"></div>
+      <button class="btn" type="submit">Upload & Reload</button>
+    </form>
+    <div style="height:12px;color:#333">
+      {% if msg %}<div style="margin-top:12px"><strong>Status:</strong> {{ msg }}</div>{% endif %}
+    </div>
+    <div style="height:12px"></div>
+    <a href="/">Back to app</a>
+  </div>
+</body>
+</html>
+
